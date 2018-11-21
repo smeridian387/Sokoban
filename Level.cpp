@@ -1,12 +1,15 @@
 //project includes
 #include "Level.h"
+#include "Framework/AssetManager.h"
 
 //library includes
 #include <iostream>
 #include <fstream>
 
 Level::Level()
-	:m_CurrentLevel(0)
+	:m_cellSize(64.0f)
+	,m_CurrentLevel(0)
+	,m_background()
 
 {
 	LoadLevel(1);
@@ -15,10 +18,22 @@ Level::Level()
 void Level::Draw(sf::RenderTarget& _Target)
 {
 	//create and update camera
-	sf::View Camera = _Target.getDefaultView();
+	sf::View camera = _Target.getDefaultView();
+
+	//adjust camera as needed
+	camera.setCenter(m_background[0].size() * m_cellSize /2 ,m_background.size() * m_cellSize/2);
 
 	// Draw game world to the window
-	_Target.setView(Camera);
+	_Target.setView(camera);
+	for (int y = 0; y < m_background.size(); ++y)
+	{
+		for (int x = 0; x < m_background[y].size(); ++x)
+		{
+			_Target.draw(m_background[y][x]);
+
+		}
+
+	}
 
 	// TODO Draw game objects
 
@@ -42,7 +57,7 @@ void Level::LoadLevel(int _LevelToLoad)
 	//TODO
 	
 	//clear out our lists
-	//TODO
+	m_background.clear();
 	   	  
 	//set the current level
 	m_CurrentLevel = _LevelToLoad;
@@ -63,12 +78,10 @@ void Level::LoadLevel(int _LevelToLoad)
 	}
 
 	// set the starting X and Y coordinates used to position level objects
-	float X = 0.0f;
-	float Y = 0.0f;
+	int x = 0.0f;
+	int y = 0.0f;
 
-	//Define the spacing we will use for our grid
-	const float X_SPACE = 100.0f;
-	const float Y_SPACE = 100.0f;
+	m_background.push_back(std::vector<sf::Sprite>());
 
 	// read each character one by one from the file...
 	char ch;
@@ -81,21 +94,32 @@ void Level::LoadLevel(int _LevelToLoad)
 		//perform actions based on what character was read in
 		if (ch == ' ')
 		{
-			X += X_SPACE;
+			x += 1;
 		}
 		else if (ch == '\n')
 		{
-			Y += Y_SPACE;
-			X = 0;
-		}
-		else if (ch == '-')
-		{
-			// do nothing - empty space
+			y += 1;
+			x = 0;
+
+			//create a new row on out grid
+			m_background.push_back(std::vector<sf::Sprite>());
 		}
 		else
 		{
-			std::cerr << "unrecognised character in level file: " << ch;
+			//this is going to be some object (or epty space), so we need a background
+
+			m_background[y].push_back(sf::Sprite(AssetManager::GetTexture("graphics/ground.png")));
+			m_background[y][x].setPosition(x*m_cellSize, y*m_cellSize);
+			if (ch == '-')
+			{
+				// do nothing - empty space
+			}
+			else
+			{
+				std::cerr << "unrecognised character in level file: " << ch;
+			}
 		}
+		
 
 	}
 

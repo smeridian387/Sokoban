@@ -17,6 +17,7 @@ public:
 
 private:
 
+	const float m_cellSize;
 	int m_CurrentLevel;
-	
+	std::vector< std::vector < sf::Sprite > > m_background;
 };
