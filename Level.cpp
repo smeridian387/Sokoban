@@ -2,6 +2,8 @@
 #include "Level.h"
 #include "Framework/AssetManager.h"
 #include "wall.h"
+#include "storage.h"
+#include "player.h"
 
 //library includes
 #include <iostream>
@@ -66,6 +68,27 @@ void Level::Draw(sf::RenderTarget& _Target)
 void Level::Update(sf::Time _FrameTime)
 {
 	//TODO
+}
+
+void Level::Input(sf::Event _gameEvent)
+{
+	//rows
+	for (int y = 0; y < m_contents.size(); y++)
+	{
+		//coloumbs
+		for (int x = 0; x < m_contents[y].size(); x++)
+		{
+			//grid object
+			for (int z = 0; z < m_contents[y][x].size(); z++)
+			{
+				m_contents[y][x][z]->Input(_gameEvent);
+
+			}
+
+		}
+
+	}
+
 }
 
 void Level::LoadLevel(int _LevelToLoad)
@@ -155,7 +178,7 @@ void Level::LoadLevel(int _LevelToLoad)
 			{
 				// do nothing - empty space
 			}
-			else if (ch == "W")
+			else if (ch == 'W')
 			{
 				Wall* wall = new Wall();
 				wall->SetLevel(this);
@@ -163,9 +186,25 @@ void Level::LoadLevel(int _LevelToLoad)
 				m_contents[y][x].push_back(wall);
 
 			}
+			else if (ch == 'P')
+			{
+				Player* player = new Player();
+				player->SetLevel(this);
+				player->SetGridPosition(x, y);
+				m_contents[y][x].push_back(player);
+
+			}
+			else if (ch == 'S')
+			{
+				Storage* storage = new Storage();
+				storage->SetLevel(this);
+				storage->SetGridPosition(x, y);
+				m_contents[y][x].push_back(storage);
+
+			}
 			else
 			{
-				std::cerr << "unrecognised character in level file: " << ch;
+				std::cerr << "unrecognised character in level file: " << ch << std::endl;
 			}
 		}
 		
@@ -191,5 +230,41 @@ float Level::GetCellSize()
 {
 	return m_cellSize;
 
+
+}
+
+bool Level::MoveObjectTo(GridObject* _toMove, sf::Vector2i targetPos)
+{
+	//dont trust other code
+	//make sure _toMove is a valid pointer
+	if (_toMove != nullptr && targetPos.y >=0 && targetPos.y < m_contents.size() && targetPos.x >=0 && targetPos.x < m_contents[targetPos.y].size())
+	{
+		//get the current position of the grid object 
+		sf::Vector2i oldPos = _toMove->GetGridPosition();
+
+		//find the object in the list using an iterator
+		//and the find method
+		auto it = std::find(m_contents[oldPos.y][oldPos.x].begin(),
+							m_contents[oldPos.y][oldPos.x].end(), _toMove);
+		// if we found the object at this location,
+		//it will NOT equal the end of the vector
+		if (it != m_contents[oldPos.y][oldPos.x].end())
+		{
+			//we found the object
+
+			//remove it from the old position 
+			m_contents[oldPos.y][oldPos.x].erase(it);
+
+			//add it to its new position
+			m_contents[targetPos.y][targetPos.x].push_back(_toMove);
+
+			//tell the object its new position
+			_toMove->SetGridPosition(targetPos);
+
+			//return 
+			return true;
+
+		}
+	}
 
 }

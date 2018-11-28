@@ -5,8 +5,9 @@
 
 //forward decleration
 //only works with pointers and references
+class Level;
 
-class GridObject
+class GridObject : public SpriteObject
 {
 
 public:
@@ -18,7 +19,9 @@ public:
 
 	void SetLevel(Level* _newLevel);
 
-private:
+	sf::Vector2i GetGridPosition();
+
+protected:
 
 	sf::Vector2i m_gridPosition;
 	Level* m_level;

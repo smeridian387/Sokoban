@@ -14,7 +14,7 @@ GridObject::GridObject()
 void GridObject::SetGridPosition(sf::Vector2i _newPostion)
 {
 	m_gridPosition = _newPostion;
-	m_sprite.setPosition(m_gridPosition.x * m_level->GetCellSize(),
+	m_Sprite.setPosition(m_gridPosition.x * m_level->GetCellSize(),
 		m_gridPosition.y * m_level->GetCellSize());
 }
 
@@ -26,5 +26,11 @@ void GridObject::SetGridPosition(int _x, int _y)
 void GridObject::SetLevel(Level* _newLevel)
 {
 	m_level = _newLevel;
+
+}
+
+sf::Vector2i GridObject::GetGridPosition()
+{
+	return m_gridPosition;
 
 }

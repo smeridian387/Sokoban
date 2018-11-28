@@ -3,6 +3,7 @@
 //library includes
 #include <SFML/Graphics.hpp>
 #include "gridObject.h"
+
 class Level
 {
 
@@ -11,12 +12,14 @@ public:
 
 	void Draw(sf::RenderTarget& _Target);
 	void Update(sf::Time _FrameTime);
+	void Input(sf::Event _gameEvent);
 
 	void LoadLevel(int _LevelToLoad);
 	void ReloadLevel();
 	void LoadNextLevel();
 
 	float GetCellSize();
+	bool MoveObjectTo(GridObject* _toMove, sf::Vector2i targetPos);
 
 private:
 

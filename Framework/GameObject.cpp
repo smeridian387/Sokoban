@@ -16,6 +16,12 @@ void GameObject::Update(sf::Time _FrameTime)
 
 }
 
+void GameObject::Input(sf::Event _gameEvent)
+{
+
+
+}
+
 sf::FloatRect GameObject::GetBounds() //function for setting up bounding boxes
 {
 	return sf::FloatRect();//use default float rect value

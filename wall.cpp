@@ -6,5 +6,5 @@ Wall::Wall()
 	:GridObject()
 {
 
-	m_sprite.setTexture(AssetManager::GetTexture("graphics/wall.png"));
+	m_Sprite.setTexture(AssetManager::GetTexture("graphics/wall.png"));
 }

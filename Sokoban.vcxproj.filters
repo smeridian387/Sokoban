@@ -44,6 +44,12 @@
     <ClCompile Include="wall.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="Storage.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Animation.h">
@@ -71,6 +77,12 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="wall.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="storage.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
       <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
